@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DLI Power Switch Control</title>
+<style>
+        table {
+            width: 40%; /* Decreased overall table width */
+            border-collapse: collapse;
+        }
+ 
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            width: 33%; /* Equal width for each column */
+        }
+ 
+        label {
+            margin-right: 10px; /* Adjust the margin as needed */
+        }
+</style>
+</head>
+<body>
+<h1>DLI Power Switch Control</h1>
+ 
+    <h2>Control Buttons</h2>
+<table>
+<tr>
+<th>Button Name</th>
+<th>ON</th>
+<th>OFF</th>
+</tr>
+<form method="post" action="{{ url_for('control') }}">
+            {% for outlet, custom_name in zipped_data %}
+<tr>
+<td><label for="button{{ outlet[0] }}">{{ custom_name }}</label></td>
+<td><button type="submit" name="action_on_{{ outlet[0] }}" value="on">ON</button></td>
+<td><button type="submit" name="action_off_{{ outlet[0] }}" value="off">OFF</button></td>
+<input type="hidden" name="outlet" value="{{ outlet[0] }}">
+</tr>
+            {% endfor %}
+</form>
+</table>
+</body>
+</html>
