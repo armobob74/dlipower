@@ -62,7 +62,7 @@ def pmanControl():
     args = d['args']
     button_name = args[0] 
 
-    outlet = config['custom_button_names'].index(button_name)
+    outlet = config['custom_button_names'].index(button_name) + 1 # add 1 because it's 1-indexed
     action = args[1].lower() # on or off
 
     if action == 'on':
