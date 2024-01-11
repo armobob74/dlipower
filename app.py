@@ -5,7 +5,6 @@ import json
 import sys
 import os
 
-
 # load the config
 if len(sys.argv) > 1:
     config_name = sys.argv[1]
@@ -58,6 +57,7 @@ def pmanControl():
     Tell power switch whether to turn on or off
     args format: [button name, action (on or off)]
     """
+
     d = json.loads(request.data)
     args = d['args']
     button_name = args[0] 
@@ -66,9 +66,10 @@ def pmanControl():
     action = args[1].lower() # on or off
 
     if action == 'on':
-        return switch.on(outlet)
+        retbool = switch.on(outlet)
     elif action == 'off':
-        return switch.off(outlet)
+        retbool = switch.off(outlet)
+    return {'status':"No Error", "message":retbool}
 
 if __name__ == '__main__':
     app.run(debug=True, port = config['port'])
