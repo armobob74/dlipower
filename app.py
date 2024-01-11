@@ -20,7 +20,7 @@ with open(config_path) as f:
     config = json.load(f)
 
 app = Flask(__name__)
-switch = PowerSwitch(hostname=conig['hostname'])
+switch = PowerSwitch(hostname=config['hostname'])
 
 @app.route('/')
 def index():     
