@@ -1,0 +1,14 @@
+{
+  "hostname": "192.168.0.101",
+  "port": 5900,
+  "custom_button_names": [
+    "Buchi 5",
+    "Buchi 6",
+    "Buchi 7",
+    "Buchi 8",
+    "Buchi 9",
+    "Buchi 10",
+    "Socket 7",
+    "Socket 8"
+  ]
+}

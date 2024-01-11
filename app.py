@@ -1,13 +1,31 @@
 from flask import Flask, render_template, request, redirect, url_for
 from dlipower import PowerSwitch
+import json
+import sys
+import os
+
+
+# load the config
+if len(sys.argv) > 1:
+    config_name = sys.argv[1]
+else:
+    config_name = "config1"
+if not config_name.endswith('.json'):
+    config_name += '.json'
+
+config_path = os.path.join('configs',config_name)
+print("Loading config: ", config_path)
+
+with open(config_path) as f:
+    config = json.load(f)
 
 app = Flask(__name__)
-switch = PowerSwitch()
+switch = PowerSwitch(hostname=conig['hostname'])
 
 @app.route('/')
 def index():     
     outlets = switch.statuslist()     
-    custom_button_names = ['Buchi 5', 'Buchi 6', 'Buchi 7', 'Buchi 8', 'Buchi 9', 'Buchi 10', 'Socket 7', 'Socket 8']     
+    custom_button_names = config['custom_button_names']
     zipped_data = zip(outlets[:8], custom_button_names)     
     return render_template('index.html', zipped_data=zipped_data)
 
@@ -32,4 +50,4 @@ def control():
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
-    app.run(debug=True, port = 5900)
+    app.run(debug=True, port = config['port'])

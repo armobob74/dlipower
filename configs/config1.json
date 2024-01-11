@@ -1,0 +1,14 @@
+{
+  "hostname": "192.168.0.100",
+  "port": 5700,
+  "custom_button_names": [
+    "Stir Dispersed Phase",
+    "Buchi 3",
+    "Buchi 4",
+    "Buchi 2",
+    "Build Dispersed Phase",
+    "Build Suspended Phase",
+    "Buchi 1",
+    "Build Continuos Phase"
+  ]
+}
