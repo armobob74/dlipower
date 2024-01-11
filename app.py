@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
+from flask_cors import CORS
 from dlipower import PowerSwitch
 import json
 import sys
@@ -20,6 +21,7 @@ with open(config_path) as f:
     config = json.load(f)
 
 app = Flask(__name__)
+CORS(app)
 switch = PowerSwitch(hostname=config['hostname'])
 
 @app.route('/')
@@ -48,6 +50,25 @@ def control():
             switch.off(outlet)
  
     return redirect(url_for('index'))
+
+@app.route('/pman/control', methods=['POST'])
+def pmanControl():
+    """
+    Meant to be called by Unified UI
+    Tell power switch whether to turn on or off
+    args format: [button name, action (on or off)]
+    """
+    d = json.loads(request.data)
+    args = d['args']
+    button_name = args[0] 
+
+    outlet = config['custom_button_names'].index(button_name)
+    action = args[1].lower() # on or off
+
+    if action == 'on':
+        return switch.on(outlet)
+    elif action == 'off':
+        return switch.off(outlet)
 
 if __name__ == '__main__':
     app.run(debug=True, port = config['port'])
