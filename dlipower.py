@@ -116,7 +116,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 # Global settings
-TIMEOUT = 20
+TIMEOUT = 30
 RETRIES = 3
 CYCLETIME = 3
 CONFIG_DEFAULTS = {
