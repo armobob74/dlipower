@@ -1,0 +1,3 @@
+### Tue, 02-20-2024 ###
+It should be possible to call the DLI servers directly without worrying about PMAN stuff and timeouts
+
