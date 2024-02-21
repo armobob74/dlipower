@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style type="text/css" media="screen">
+      html {
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      select {
+        background-color: white;
+        width: 15em;
+        border: solid 1px gray;
+      }
+      select:hover {
+	      background-color: rgb(200,200,200);
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+        width: 20em;
+        border: dotted 1px gray;
+        padding: 1em;
+        gap: 1em;
+      }
+
+
+      .formgroup {
+        display: flex;
+        justify-content: space-between;
+      }
+      body {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+      }
+
+      #preview{
+	padding:1em;
+      }
+
+    </style>
+  </head>
+  <body>
+    <form id="test">
+      <h2>DLI API Test</h2>
+      <div class="formgroup">
+        <label for="url">DLI URL:</label>
+        <select type="text" name="url" id="url">
+          <option>http://192.168.0.100</option>
+          <option>http://192.168.0.101</option>
+        </select>
+      </div>
+      <div class="formgroup">
+        <label for="on_off">On/Off:</label>
+        <select name="on_off" id="on_off">
+          <option value="true">on</option>
+          <option value="false">off</option>
+        </select>
+      </div>
+      <div class="formgroup">
+        <label for="socket">Socket:</label>
+        <select name="socket" id="socket">
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+          <option>6</option>
+          <option>7</option>
+          <option>8</option>
+        </select>
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+    <div id="preview">
+	    <div id="url-preview"></div>
+	    <div id="request-preview"></div>
+    </div>
+
+  </body>
+  <script>
+    const form = document.getElementById("test");
+    form.addEventListener("submit", async () => {
+    	response = await socket();
+    	console.log(response)
+    });
+    form.addEventListener("input", async () => {
+	    buildRequest()
+    });
+    buildRequest()
+    function buildRequest(){
+    	const on_off = document.getElementById("on_off").value;
+    	const url = document.getElementById("url").value;
+    	const socket_number = parseInt(document.getElementById("socket").value);
+    	const endpoint = url + `/restapi/relay/outlets/${socket_number - 1}/state/`;
+    	let request = {
+    		method: "PUT",
+    		headers: {
+    			Authorization: "Basic " + btoa("admin:1234"),
+    			"X-CSRF": "x",
+    			"Content-Type": "application/json",
+    		},
+    		body: JSON.stringify({ value: on_off }),
+    	}
+
+	    // visualize stuff before returning 
+	    document.getElementById("url-preview").innerText = endpoint;
+	    document.getElementById("request-preview").innerText = JSON.stringify(request,4,2);
+    	return request
+    }
+    async function socket() {
+    	const url = document.getElementById("url").value;
+    	const socket_number = parseInt(document.getElementById("socket").value);
+    	const endpoint = url + `/restapi/relay/outlets/${socket_number - 1}/state/`;
+    	const request = buildRequest()
+    	let response = await fetch(endpoint, request);
+	console.log(response)
+    }
+  </script>
+</html>
