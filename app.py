@@ -3,6 +3,7 @@ from flask_cors import CORS
 from dlipower import PowerSwitch
 import json
 import sys
+import time
 import os
 
 # load the config
@@ -21,11 +22,22 @@ with open(config_path) as f:
 
 app = Flask(__name__)
 CORS(app)
-switch = PowerSwitch(hostname=config['hostname'])
+app.switch = PowerSwitch(hostname=config['hostname'])
+DLI_TIMEOUT_TIME = 25 * 60 # 30 min, but we're doing 25 for now
+# multiplying by 3 so that the re-login is immediately triggered
+# this is mostly so we can see that it works
+app.config['dli_session_start_time'] = time.time() * 3
+
+@app.before_request
+def re_log_if_needed():
+    print("## Time to re-login ##")
+    if time.time() - app.config['dli_session_start_time'] >= DLI_TIMEOUT_TIME:
+        del(app.switch)
+        app.switch = PowerSwitch(hostname=config['hostname'])
 
 @app.route('/')
 def index():     
-    outlets = switch.statuslist()     
+    outlets = app.switch.statuslist()     
     custom_button_names = config['custom_button_names']
     zipped_data = zip(outlets[:8], custom_button_names)     
     return render_template('index.html', zipped_data=zipped_data)
@@ -44,9 +56,9 @@ def control():
  
     if action and outlet is not None:
         if action == 'on':
-            switch.on(outlet)
+            app.switch.on(outlet)
         elif action == 'off':
-            switch.off(outlet)
+            app.switch.off(outlet)
  
     return redirect(url_for('index'))
 
@@ -66,9 +78,9 @@ def pmanControl():
     action = args[1].lower() # on or off
 
     if action == 'on':
-        retbool = switch.on(outlet)
+        retbool = app.switch.on(outlet)
     elif action == 'off':
-        retbool = switch.off(outlet)
+        retbool = app.switch.off(outlet)
     return {'status':"No Error", "message":retbool}
 
 if __name__ == '__main__':

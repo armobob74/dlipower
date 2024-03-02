@@ -1,4 +1,5 @@
-### Tue, 02-20-2024 ###
+### Date: Tue, 02-20-2024 ###
+# Overview
 It should be possible to call the DLI servers directly without worrying about PMAN stuff and timeouts
 
 The DLI is *NOT ON WIFI*, it's directly connected to the build PC
@@ -38,3 +39,8 @@ fetch("http://192.168.0.100/restapi/relay/outlets/2/state/", {
   body: JSON.stringify({value:"true"}) 
 })
 ```
+
+## Test 1 learnings:
+- the DLI has some CORS issues
+- tried to set CORS in the "External API" section, but it kept getting errors
+- also Plaintext auth may not be enabled 
