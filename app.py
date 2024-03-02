@@ -24,9 +24,9 @@ app = Flask(__name__)
 CORS(app)
 app.switch = PowerSwitch(hostname=config['hostname'])
 DLI_TIMEOUT_TIME = 25 * 60 # 30 min, but we're doing 25 for now
-# multiplying by 3 so that the re-login is immediately triggered
+# setting to 0 so that the re-login is immediately triggered
 # this is mostly so we can see that it works
-app.config['dli_session_start_time'] = time.time() * 3
+app.config['dli_session_start_time'] = 0
 
 @app.before_request
 def re_log_if_needed():
