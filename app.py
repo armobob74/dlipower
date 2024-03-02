@@ -34,6 +34,7 @@ def re_log_if_needed():
     if time.time() - app.config['dli_session_start_time'] >= DLI_TIMEOUT_TIME:
         del(app.switch)
         app.switch = PowerSwitch(hostname=config['hostname'])
+        app.config['dli_session_start_time'] = time.time()
 
 @app.route('/')
 def index():     
