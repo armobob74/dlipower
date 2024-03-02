@@ -30,8 +30,8 @@ app.config['dli_session_start_time'] = 0
 
 @app.before_request
 def re_log_if_needed():
-    print("## Time to re-login ##")
     if time.time() - app.config['dli_session_start_time'] >= DLI_TIMEOUT_TIME:
+        print("## Time to re-login ##")
         del(app.switch)
         app.switch = PowerSwitch(hostname=config['hostname'])
         app.config['dli_session_start_time'] = time.time()
