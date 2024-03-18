@@ -1,0 +1,9 @@
+{
+  "hostname": "192.168.0.100",
+  "port": 5700,
+  "custom_button_names": [
+    "Pump In",
+    "Pump Out",
+    "Stir"
+  ]
+}
