@@ -33,6 +33,7 @@
 <th>Button Name</th>
 <th>ON</th>
 <th>OFF</th>
+<th>Status</th>
 </tr>
 <form method="post" action="{{ url_for('control') }}">
             {% for outlet, custom_name in zipped_data %}
@@ -41,6 +42,7 @@
 <td><button type="submit" name="action_on_{{ outlet[0] }}" value="on">ON</button></td>
 <td><button type="submit" name="action_off_{{ outlet[0] }}" value="off">OFF</button></td>
 <input type="hidden" name="outlet" value="{{ outlet[0] }}">
+<td id="status{{outlet[0]}}"></td>
 </tr>
             {% endfor %}
 </form>
@@ -61,12 +63,18 @@
 					let plugnum = item[0]
 					let on_or_off = item[2]
 					console.log(plugnum, on_or_off)
+					document.getElementById(`status${plugnum}`).innerText = on_or_off;
 				});
 			})
 			.catch(error => console.error('Error fetching status list:', error));
 	}
+	// check periodically in case somebody else enacts a change
+	setInterval(updateStatus, 3000);
+	let allButtons = document.querySelectorAll('button')
+	allButtons.forEach(button => {
+	  button.addEventListener('click', updateStatus);
+	});
 </script>
-	}
 
 
 </script>
