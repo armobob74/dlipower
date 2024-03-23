@@ -27,6 +27,7 @@
 <h1>DLI Power Switch Control</h1>
  
     <h2>Control Buttons</h2>
+    <button type="button" onclick="allOff()">ALL OFF</button>
 <table>
 <tr>
 <th>Button Name</th>
@@ -44,5 +45,30 @@
             {% endfor %}
 </form>
 </table>
+<script>
+	function allOff(){
+		let buttons = document.querySelectorAll('button[value="off"]');
+		buttons.forEach(button => {
+			button.click();
+		});
+	}
+	async function updateStatus(){
+		// statuslist contains array of (plugnum, hostname, status) for each outlet
+		fetch('/pman/statuslist')
+			.then(response => response.json())
+			.then(data => {
+				data.forEach(item => {
+					let plugnum = item[0]
+					let on_or_off = item[2]
+					console.log(plugnum, on_or_off)
+				});
+			})
+			.catch(error => console.error('Error fetching status list:', error));
+	}
+</script>
+	}
+
+
+</script>
 </body>
 </html>

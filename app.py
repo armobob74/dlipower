@@ -84,5 +84,14 @@ def pmanControl():
         retbool = app.switch.off(outlet)
     return {'status':"No Error", "message":retbool}
 
+@app.route('/pman/statuslist',methods=['GET'])
+def statusList():
+    """
+    Returns status of each outlet as a list
+    each item will contain 3 items plugnumber, hostname and state
+    """
+    statuslist = app.switch.statuslist()
+    return json.dumps(statuslist)
+
 if __name__ == '__main__':
     app.run(debug=True, port = config['port'])
