@@ -49,7 +49,7 @@
 	function allOff(){
 		let buttons = document.querySelectorAll('button[value="off"]');
 		buttons.forEach(button => {
-			button.click();
+			button.dispatchEvent(new Event('click', { bubbles: true }));
 		});
 	}
 	async function updateStatus(){
