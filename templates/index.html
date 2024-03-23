@@ -21,6 +21,12 @@
         label {
             margin-right: 10px; /* Adjust the margin as needed */
         }
+	td.status:contains('ON') {
+	    color: green;
+	}
+	td.status:contains('OFF') {
+	    color: red;
+	}
 </style>
 </head>
 <body>
@@ -42,7 +48,7 @@
 <td><button type="submit" name="action_on_{{ outlet[0] }}" value="on">ON</button></td>
 <td><button type="submit" name="action_off_{{ outlet[0] }}" value="off">OFF</button></td>
 <input type="hidden" name="outlet" value="{{ outlet[0] }}">
-<td id="status{{outlet[0]}}"></td>
+<td id="status{{outlet[0]}}" class="status"></td>
 </tr>
             {% endfor %}
 </form>
