@@ -33,7 +33,6 @@
 <h1>DLI Power Switch Control</h1>
  
     <h2>Control Buttons</h2>
-    <button type="button" onclick="allOff()">ALL OFF</button>
 <table>
 <tr>
 <th>Button Name</th>
@@ -54,12 +53,6 @@
 </form>
 </table>
 <script>
-	function allOff(){
-		let buttons = document.querySelectorAll('button[value="off"]');
-		buttons.forEach(button => {
-			button.dispatchEvent(new Event('click', { bubbles: true }));
-		});
-	}
 	async function updateStatus(){
 		// statuslist contains array of (plugnum, hostname, status) for each outlet
 		fetch('/pman/statuslist')
@@ -74,12 +67,12 @@
 			})
 			.catch(error => console.error('Error fetching status list:', error));
 	}
+	// check immediately on page load
+	updateStatus()
 	// check periodically in case somebody else enacts a change
 	setInterval(updateStatus, 3000);
-	let allButtons = document.querySelectorAll('button')
-	allButtons.forEach(button => {
-	  button.addEventListener('click', updateStatus);
-	});
+	// no need to check on button click because button click submits form and resets page
+
 </script>
 
 
