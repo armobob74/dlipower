@@ -102,7 +102,7 @@ def resume():
         outlet = i+1
         if on_or_off == 'on':
             app.switch.on(outlet)
-        if on_or_off == 'off':
+        elif on_or_off == 'off':
             app.switch.off(outlet)
     return {'status':"ok", "message":'resumed'}
 
