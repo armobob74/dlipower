@@ -27,6 +27,8 @@ DLI_TIMEOUT_TIME = 25 * 60 # 30 min, but we're doing 25 for now
 # setting to 0 so that the re-login is immediately triggered
 # this is mostly so we can see that it works
 app.config['dli_session_start_time'] = 0
+# this allows the DLI to keep track of state so that the resume button works in case of a hardstop
+app.config['resume_from_state'] = ['off'] * 8
 
 @app.before_request
 def re_log_if_needed():
@@ -58,8 +60,10 @@ def control():
     if action and outlet is not None:
         if action == 'on':
             app.switch.on(outlet)
+            app.config['resume_from_state'][outlet-1] = 'on'
         elif action == 'off':
             app.switch.off(outlet)
+            app.config['resume_from_state'][outlet-1] = 'off'
  
     return redirect(url_for('index'))
 
@@ -80,9 +84,29 @@ def pmanControl():
 
     if action == 'on':
         retbool = app.switch.on(outlet)
+        app.config['resume_from_state'][outlet-1] = 'on'
     elif action == 'off':
         retbool = app.switch.off(outlet)
+        app.config['resume_from_state'][outlet-1] = 'off'
     return {'status':"No Error", "message":retbool}
+
+@app.route('/pman/hardstop', methods=['POST', 'GET'])
+def hardstop():
+    for outlet in range(1,9):
+        app.switch.off(outlet)
+    return {'status':"ok", "message":'hardstopped'}
+
+@app.route('/pman/resume', methods=['POST', 'GET'])
+def resume():
+    for i, on_or_off in enumerate(app.config['resume_from_state']):
+        outlet = i+1
+        if on_or_off == 'on':
+            app.switch.on(outlet)
+        elif on_or_off == 'off':
+            app.switch.off(outlet)
+    return {'status':"ok", "message":'resumed'}
+
+    
 
 @app.route('/pman/statuslist',methods=['GET'])
 def statusList():
