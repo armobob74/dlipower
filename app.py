@@ -106,8 +106,6 @@ def resume():
             app.switch.off(outlet)
     return {'status':"ok", "message":'resumed'}
 
-    
-
 @app.route('/pman/statuslist',methods=['GET'])
 def statusList():
     """
