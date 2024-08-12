@@ -7,7 +7,7 @@
 <title>DLI Power Switch Control</title>
 <style>
         table {
-            width: 40%; /* Decreased overall table width */
+            width: 40%;
             border-collapse: collapse;
         }
  
@@ -15,11 +15,11 @@
             border: 1px solid #ddd;
             padding: 8px;
             text-align: center;
-            width: 33%; /* Equal width for each column */
+            width: 33%;
         }
  
         label {
-            margin-right: 10px; /* Adjust the margin as needed */
+            margin-right: 10px;
         }
 </style>
 </head>
@@ -33,6 +33,7 @@
 <th>ON</th>
 <th>OFF</th>
 <th>Status</th>
+<th>Time On</th>
 </tr>
 <form method="post" action="{{ url_for('control') }}">
             {% for outlet, custom_name in zipped_data %}
@@ -42,11 +43,40 @@
 <td><button type="submit" name="action_off_{{ outlet[0] }}" value="off">OFF</button></td>
 <input type="hidden" name="outlet" value="{{ outlet[0] }}">
 <td id="status{{outlet[0]}}" class="status"></td>
+<td id="timeon{{outlet[0]}}" class="timeon"></td>
 </tr>
             {% endfor %}
 </form>
 </table>
 <script>
+	// this object stores the times that switches are turned ON
+	// it is used for calculating runtimes
+	// it persists even if tab is closed
+	let turnon_times = {};
+	if(localStorage.getItem('turnon_times')){
+		turnon_times = JSON.parse(
+			localStorage.getItem('turnon_times');
+		)
+	}
+	let timers = document.querySelectorAll(.timeon)
+	function updateTimers(){
+		timers.forEach((timer)=>{
+			let newText = '0.000'
+			let ontime = turnon_times[timer.id]
+			if(ontime) {
+				let timedelta = Date.now() - ontime
+				let hours = Math.floor(timedelta / 3600000);
+				let minutes = Math.floor((timedelta % 3600000) / 60000);
+				let seconds = ((timedelta % 60000) / 1000).toFixed(2);
+				let newText = 
+				    String(hours).padStart(2, '0') + ':' + 
+				    String(minutes).padStart(2, '0') + ':' + 
+				    String(seconds).padStart(5, '0');
+			} 
+			timer.innerText = newText;
+		})
+	}
+
 	async function updateStatus(){
 		// statuslist contains array of (plugnum, hostname, status) for each outlet
 		fetch('/pman/statuslist')
@@ -55,25 +85,42 @@
 				data.forEach(item => {
 					let plugnum = item[0]
 					let on_or_off = item[2]
+					let timeon_id = `timeon${plugnum}`
 					console.log(plugnum, on_or_off)
 					let td = document.getElementById(`status${plugnum}`)
 					if(td){
 						td.innerText = on_or_off;
 						if(on_or_off == 'ON'){
+							if(!turnon_times[timeon_id]){
+								// this means we must assign a turnon time
+								turnon_times[timeon_id] = Date.now()
+							}
 							td.style.color = 'darkgreen';
 						} else {
+							if(turnon_times[timeon_id]){
+								// time to clear this bad boy
+								delete(turnon_times[timeon_id])
+							}
 							td.style.color = 'darkred';
 						}
 					}
 				});
+				localStorage.setItem('turnon_times', JSON.stringify(turnon_times))
 			})
 			.catch(error => console.error('Error fetching status list:', error));
 	}
+
 	// check immediately on page load
 	updateStatus()
+	updateTimers()
+
 	// check periodically in case somebody else enacts a change
-	setInterval(updateStatus, 3000);
 	// no need to check on button click because button click submits form and resets page
+	setInterval(updateStatus, 3000);
+
+	// gotta update the timers very frequently
+	// this does not require any HTTP requests so it's possible to do it many times a second
+	setInterval(updateTimers, 100);
 
 </script>
 
