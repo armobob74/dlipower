@@ -55,10 +55,10 @@
 	let turnon_times = {};
 	if(localStorage.getItem('turnon_times')){
 		turnon_times = JSON.parse(
-			localStorage.getItem('turnon_times');
+			localStorage.getItem('turnon_times')
 		)
 	}
-	let timers = document.querySelectorAll(.timeon)
+	let timers = document.querySelectorAll('.timeon')
 	function updateTimers(){
 		timers.forEach((timer)=>{
 			let newText = '0.000'
@@ -68,12 +68,12 @@
 				let hours = Math.floor(timedelta / 3600000);
 				let minutes = Math.floor((timedelta % 3600000) / 60000);
 				let seconds = ((timedelta % 60000) / 1000).toFixed(2);
-				let newText = 
+				newText = 
 				    String(hours).padStart(2, '0') + ':' + 
 				    String(minutes).padStart(2, '0') + ':' + 
 				    String(seconds).padStart(5, '0');
 			} 
-			timer.innerText = newText;
+			timer.innerHTML = newText;
 		})
 	}
 
@@ -86,7 +86,6 @@
 					let plugnum = item[0]
 					let on_or_off = item[2]
 					let timeon_id = `timeon${plugnum}`
-					console.log(plugnum, on_or_off)
 					let td = document.getElementById(`status${plugnum}`)
 					if(td){
 						td.innerText = on_or_off;

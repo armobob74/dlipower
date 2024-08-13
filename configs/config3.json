@@ -1,0 +1,14 @@
+{
+  "hostname": "192.168.0.102",
+  "port": 5950,
+  "custom_button_names": [
+    "Washing Pump 1",
+    "Washing Pump 2",
+    "Washing Pump 3",
+    "Washing Pump 4",
+    "Free Port",
+    "Free Port",
+    "Drain Pump",
+    "Stirrers"
+  ]
+}

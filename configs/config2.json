@@ -2,13 +2,13 @@
   "hostname": "192.168.0.101",
   "port": 5900,
   "custom_button_names": [
-    "Buchi 5",
-    "Buchi 6",
-    "Buchi 7",
-    "Buchi 8",
-    "Buchi 9",
-    "Buchi 10",
-    "Peri Pump into Aurora",
-    "Socket 8"
+    "Buchi 5 out",
+    "Buchi 6 out",
+    "Buchi 7 out",
+    "Buchi 8 out",
+    "Buchi 9 out",
+    "Buchi 10 out",
+    "Dilution Pump",
+    "WASHING PUMP"
   ]
 }

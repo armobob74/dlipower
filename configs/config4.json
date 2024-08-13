@@ -1,0 +1,14 @@
+{
+  "hostname": "192.168.0.103",
+  "port": 5980,
+  "custom_button_names": [
+    "Washing Pump 5",
+    "Washing Pump 6",
+    "Water valve 1",
+    "Water valve 2",
+    "Water valve 3",
+    "Water valve 4",
+    "Water valve 5",
+    "Water valve 6"
+  ]
+}

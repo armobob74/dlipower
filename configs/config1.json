@@ -3,12 +3,12 @@
   "port": 5700,
   "custom_button_names": [
     "Stir Dispersed Phase",
-    "Buchi 3",
-    "Buchi 4",
-    "Buchi 2",
-    "Build Dispersed Phase",
-    "Build Suspended Phase",
-    "Buchi 1",
-    "Build Continuous Phase"
+    "Buchi 3 out",
+    "Buchi 4 out",
+    "Buchi 2 out",
+    "FORMULATION OUT PUMP",
+    "Stir Suspended Phase",
+    "Buchi 1 out",
+    "Stir Continuous Phase"
   ]
 }
