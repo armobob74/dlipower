@@ -116,4 +116,4 @@ def statusList():
     return json.dumps(statuslist)
 
 if __name__ == '__main__':
-    app.run(debug=True, port = config['port'])
+    app.run(debug=True, port = config['port'],host='0.0.0.0')
